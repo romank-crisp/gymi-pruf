@@ -7,6 +7,6 @@ flowchart TD
     CH -->|No| E
     CH -->|Yes| R[Reward screen<br/>mastery bar grows<br/>character reaction]
     R --> Q{Continue?}
-    Q -->|Yes, another 10 min| E
-    Q -->|No, done| X[Friendly close<br/>'Bis morgen!']
+    Q -->|Yes — another 10 min| E
+    Q -->|No — done| X[Friendly close<br/>'Bis morgen!']
     X --> End([App closes,<br/>parent dashboard updates])
