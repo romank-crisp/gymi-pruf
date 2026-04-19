@@ -34,6 +34,8 @@ export default withMermaid({
         text: 'Product',
         items: [
           { text: 'Strategy', link: '/product/strategy' },
+          { text: 'Learning Program', link: '/product/learning-program' },
+          { text: 'AI Companion', link: '/product/ai-companion' },
           { text: 'User Flows & Interaction', link: '/product/user-flows-and-interaction' },
         ],
       },
