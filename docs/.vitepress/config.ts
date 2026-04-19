@@ -5,6 +5,18 @@ export default withMermaid({
   description: 'Technical documentation for the content engine',
   lang: 'en',
 
+  // Mermaid requires browser DOM — exclude from SSR to prevent blank pages
+  vite: {
+    optimizeDeps: {
+      include: ['mermaid'],
+    },
+    ssr: {
+      noExternal: ['vitepress-plugin-mermaid', 'mermaid'],
+    },
+  },
+
+  mermaid: {},
+
   themeConfig: {
     logo: '📚',
 
