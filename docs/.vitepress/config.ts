@@ -1,6 +1,6 @@
-import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 
-export default defineConfig({
+export default withMermaid({
   title: 'Gymi-Vorbereitung Docs',
   description: 'Technical documentation for the content engine',
   lang: 'en',
