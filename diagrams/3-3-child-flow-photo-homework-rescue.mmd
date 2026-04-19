@@ -1,0 +1,16 @@
+flowchart TD
+    Start([Child stuck on<br/>school worksheet]) --> CAM[Tap camera button<br/>always visible on home]
+    CAM --> SNAP[Take photo of worksheet<br/>or specific question]
+    SNAP --> AI1[AI identifies task type<br/>Wortarten? Textverständnis?<br/>Diktat? Rechnung?]
+    AI1 --> MODE{What does<br/>child want?}
+    MODE -->|'Erklär mir das'| EXP[Bilingual explanation<br/>German default,<br/>L1 on tap]
+    MODE -->|'Hilf mir'| HINT[Socratic hint,<br/>not the answer]
+    MODE -->|'Zeig mir mehr<br/>davon'| GEN[AI generates<br/>3 similar exercises]
+    EXP --> CHECK[Child tries the task]
+    HINT --> CHECK
+    GEN --> CHECK
+    CHECK --> VER{Correct?}
+    VER -->|Yes| WIN[Celebrate<br/>+ ask if they want<br/>to practice this area]
+    VER -->|No| SCAFFOLD[Gentler hint<br/>or full walkthrough]
+    SCAFFOLD --> CHECK
+    WIN --> End([Back to homework<br/>or start chapter])

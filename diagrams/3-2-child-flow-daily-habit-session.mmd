@@ -1,0 +1,12 @@
+flowchart TD
+    N([Push notification<br/>Leo hat 3 neue Übungen]) --> O[Open app]
+    O --> T[Direct to today's plan<br/>no menu]
+    T --> C1[Big button:<br/>Weiter üben - 12 min]
+    C1 --> E[Exercise loop<br/>see Part 2 Micro]
+    E --> CH{Chapter done?}
+    CH -->|No| E
+    CH -->|Yes| R[Reward screen<br/>mastery bar grows<br/>character reaction]
+    R --> Q{Continue?}
+    Q -->|Yes — another 10 min| E
+    Q -->|No — done| X[Friendly close<br/>'Bis morgen!']
+    X --> End([App closes,<br/>parent dashboard updates])

@@ -1,0 +1,12 @@
+flowchart TD
+    Start([Parent installs app]) --> P1[Parent account created<br/>email + password]
+    P1 --> P2[Parent answers 4 questions<br/>Canton - Exam target -<br/>Grade - Weak areas]
+    P2 --> P3[Child profile created<br/>Name + avatar base]
+    P3 --> H{Hand device to child}
+    H --> C1[Child chooses avatar<br/>customization - 2 min]
+    C1 --> C2[Language picker<br/>Welche Sprache spricht<br/>du zu Hause?]
+    C2 --> C3[Diagnostic mini-quiz<br/>12 items mixed difficulty<br/>~5 min]
+    C3 --> C4[Result shown as<br/>a learning map<br/>not a score]
+    C4 --> C5[First exercise<br/>calibrated to diagnostic<br/>MUST be winnable]
+    C5 --> C6([First win + reward<br/>+ streak starts])
+    C6 --> End([Parent gets notification:<br/>Lera completed her first session])

@@ -1,0 +1,16 @@
+flowchart TD
+    Enter([Parent opens<br/>dashboard tab]) --> O[Overview:<br/>This week at a glance]
+    O --> OA[Minutes practiced]
+    O --> OB[Chapters completed]
+    O --> OC[Strongest / weakest skill]
+    O --> OD[Latest Aufsatz]
+    OC --> DRILL{Drill in}
+    DRILL --> SKILL[Skill detail<br/>mastery % over time<br/>example exercises]
+    SKILL --> ACTION{Parent action}
+    ACTION -->|Print worksheet| PRINT[PDF generated<br/>formatted as ZAP paper]
+    ACTION -->|Schedule mock exam| MOCK[Calendar picker<br/>+ child notification]
+    ACTION -->|Share with tutor| SHARE[Exportable report<br/>PDF or link]
+    ACTION -->|Just read| Leave([Close])
+    PRINT --> Leave
+    MOCK --> Leave
+    SHARE --> Leave

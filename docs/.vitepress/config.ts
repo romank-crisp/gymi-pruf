@@ -1,14 +1,27 @@
-import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 
-export default defineConfig({
+export default withMermaid({
   title: 'Gymi-Vorbereitung Docs',
   description: 'Technical documentation for the content engine',
   lang: 'en',
+
+  // Mermaid requires browser DOM — exclude from SSR to prevent blank pages
+  vite: {
+    optimizeDeps: {
+      include: ['mermaid'],
+    },
+    ssr: {
+      noExternal: ['vitepress-plugin-mermaid', 'mermaid'],
+    },
+  },
+
+  mermaid: {},
 
   themeConfig: {
     logo: '📚',
 
     nav: [
+      { text: 'Product', link: '/product/strategy' },
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Collections', link: '/collections/' },
       { text: 'Lifecycle', link: '/lifecycle' },
@@ -17,6 +30,15 @@ export default defineConfig({
     ],
 
     sidebar: [
+      {
+        text: 'Product',
+        items: [
+          { text: 'Strategy', link: '/product/strategy' },
+          { text: 'Learning Program', link: '/product/learning-program' },
+          { text: 'AI Companion', link: '/product/ai-companion' },
+          { text: 'User Flows & Interaction', link: '/product/user-flows-and-interaction' },
+        ],
+      },
       {
         text: 'Guide',
         items: [
