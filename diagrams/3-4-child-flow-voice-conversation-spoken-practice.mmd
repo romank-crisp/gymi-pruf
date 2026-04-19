@@ -1,0 +1,11 @@
+flowchart TD
+    Start([Child taps<br/>Sprechen mode]) --> P[AI asks a question<br/>voice + text]
+    P --> L[Child speaks answer<br/>mic indicator visible]
+    L --> T[Live transcription<br/>shown on screen]
+    T --> AI[AI evaluates<br/>content + basic pronunciation]
+    AI --> FB{Result}
+    FB -->|Good| Pos[Voice response<br/>+ follow-up question]
+    FB -->|Off-track| Guide[AI rephrases,<br/>simpler version]
+    Pos --> L
+    Guide --> L
+    L -.stop button.-> End([Session ends<br/>transcript saved<br/>parent can review])

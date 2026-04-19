@@ -1,0 +1,14 @@
+flowchart TD
+    A([Exercise appears]) --> B[Child reads/listens]
+    B --> C{Child responds<br/>tap / voice / text}
+    C --> D[AI evaluates]
+    D --> E{Correct?}
+    E -->|Yes| F[Short positive feedback<br/>+ points<br/>+ streak tick]
+    E -->|Partially| G[Specific hint<br/>not the answer]
+    E -->|No| H[Scaffolded explanation<br/>in L1 if requested]
+    G --> C
+    F --> I{Chapter<br/>complete?}
+    H --> J[Similar easier exercise<br/>auto-generated]
+    J --> A
+    I -->|No| K[Next exercise<br/>difficulty adjusted] --> A
+    I -->|Yes| L([Chapter summary<br/>+ mastery bar update])

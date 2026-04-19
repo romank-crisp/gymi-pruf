@@ -1,0 +1,13 @@
+flowchart TD
+    A[Exercise displayed] --> R1[First attempt:<br/>wrong]
+    R1 --> H1[Small hint<br/>non-verbal: highlight<br/>relevant word]
+    H1 --> R2{Second attempt}
+    R2 -->|Correct| W[Partial credit<br/>friendly]
+    R2 -->|Wrong| H2[Verbal hint<br/>German + L1 toggle]
+    H2 --> R3{Third attempt}
+    R3 -->|Correct| W
+    R3 -->|Wrong| WALK[Full walkthrough<br/>step by step,<br/>worked example]
+    WALK --> EASY[Insert 2-3 easier<br/>items on same skill]
+    EASY --> BACK[Return to original type<br/>with slightly easier item]
+    W --> Next([Next exercise])
+    BACK --> Next

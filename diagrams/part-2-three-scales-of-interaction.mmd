@@ -1,0 +1,11 @@
+flowchart LR
+    subgraph Macro["MACRO — months<br/>Lifecycle"]
+        L1[Discovery] --> L2[Activation] --> L3[Habit] --> L4[Peak] --> L5[Post-exam]
+    end
+    subgraph Meso["MESO — minutes<br/>Session"]
+        S1[Enter] --> S2[Practice] --> S3[Reward] --> S4[Leave]
+    end
+    subgraph Micro["MICRO — seconds<br/>Exercise"]
+        E1[Prompt] --> E2[Answer] --> E3[Feedback] --> E4[Next]
+    end
+    Macro -.contains.-> Meso -.contains.-> Micro

@@ -1,0 +1,13 @@
+flowchart TD
+    T[Parent or child<br/>spots an error] --> F[Flag button on<br/>every AI response]
+    F --> FORM[Simple form:<br/>What was wrong?<br/>What should it have said?]
+    FORM --> LOG[Logged with full context<br/>exercise, prompt, response,<br/>child's L1]
+    LOG --> ACK[Immediate acknowledgment<br/>'Danke, wir schauen uns das an']
+    ACK --> REVIEW[DaZ advisor reviews<br/>weekly batch]
+    REVIEW --> FIX{Action}
+    FIX -->|Prompt issue| PF[Prompt refined]
+    FIX -->|Model limit| FB[Fallback to curated bank<br/>for this item type]
+    FIX -->|User misunderstanding| UF[UX hint added<br/>no change to AI]
+    PF --> UPDATE[Ship fix,<br/>notify flagger]
+    FB --> UPDATE
+    UF --> UPDATE

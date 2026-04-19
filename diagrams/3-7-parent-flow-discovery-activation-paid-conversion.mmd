@@ -1,0 +1,16 @@
+flowchart TD
+    D[Heard about app<br/>Telegram / FB group /<br/>school WhatsApp] --> L[Landing page<br/>2 languages offered:<br/>DE + UA/EN/...]
+    L --> T{Trust signal}
+    T --> TY[Sample AI output<br/>visible without signup]
+    T --> TP[Parents like you say...<br/>testimonials in L1]
+    T --> TE[As featured in...<br/>if/when press hits]
+    TY --> INST[Install from store]
+    TP --> INST
+    TE --> INST
+    INST --> OB[See flow 3.1<br/>Onboarding]
+    OB --> W1[Week 1: free tier<br/>Parent dashboard<br/>shows activity]
+    W1 --> W2[Week 2: weekly email<br/>'Here's what Lera did']
+    W2 --> PAY{Hit free-tier limit<br/>or want more?}
+    PAY -->|Upgrade| SUB[Choose plan<br/>monthly/annual]
+    PAY -->|Stay free| FREE[Continue on free tier<br/>nudges at milestones]
+    SUB --> PAID([Paid user])

@@ -1,0 +1,15 @@
+flowchart TD
+    Start([Child picks<br/>Aufsatz üben]) --> PICK{Choose prompt}
+    PICK -->|From ZAP archive| ARCH[Real past prompt]
+    PICK -->|From AI| GEN[AI generates<br/>age-appropriate prompt]
+    PICK -->|Own idea| OWN[Child types/speaks<br/>their own topic]
+    ARCH --> PLAN
+    GEN --> PLAN
+    OWN --> PLAN
+    PLAN[Oral planning phase<br/>AI asks: Wer? Wo?<br/>Was passiert?]
+    PLAN --> DRAFT[Child writes/speaks<br/>their draft]
+    DRAFT --> REV[AI feedback in 4 dimensions:<br/>1. Aufbau<br/>2. Sprache<br/>3. Rechtschreibung<br/>4. Spannung]
+    REV --> CHOICE{Child's choice}
+    CHOICE -->|Revise| DRAFT
+    CHOICE -->|Done| FINAL[Final version saved<br/>printable PDF generated]
+    FINAL --> End([Parent notified:<br/>Lera has written an Aufsatz<br/>+ can review 4-dim feedback])
