@@ -9,6 +9,7 @@ export default defineConfig({
     logo: '📚',
 
     nav: [
+      { text: 'Product', link: '/product/strategy' },
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Collections', link: '/collections/' },
       { text: 'Lifecycle', link: '/lifecycle' },
@@ -17,6 +18,13 @@ export default defineConfig({
     ],
 
     sidebar: [
+      {
+        text: 'Product',
+        items: [
+          { text: 'Strategy', link: '/product/strategy' },
+          { text: 'User Flows & Interaction', link: '/product/user-flows-and-interaction' },
+        ],
+      },
       {
         text: 'Guide',
         items: [
