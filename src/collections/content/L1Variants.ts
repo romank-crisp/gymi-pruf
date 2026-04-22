@@ -22,7 +22,21 @@ export const L1Variants: CollectionConfig = {
   admin: {
     useAsTitle: 'id',
     defaultColumns: ['parentType', 'parentId', 'l1', 'status'],
-    group: '03 · Theory & Content',
+    group: '04 · Translations',
+    components: {
+      views: {
+        edit: {
+          workflow: {
+            Component: '/components/admin/StatusTransitionsTab',
+            path: '/workflow',
+            tab: {
+              label: 'Workflow',
+              href: '/workflow',
+            },
+          },
+        },
+      },
+    },
   },
   access: {
     read: () => true,

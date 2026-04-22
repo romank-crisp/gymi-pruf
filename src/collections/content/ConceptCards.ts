@@ -16,8 +16,22 @@ export const ConceptCards: CollectionConfig = {
   admin: {
     useAsTitle: 'id',
     defaultColumns: ['concept', 'l1', 'status'],
-    group: '03 · Theory & Content',
+    group: '03 · Teaching Material',
     listSearchableFields: ['definition'],
+    components: {
+      views: {
+        edit: {
+          workflow: {
+            Component: '/components/admin/StatusTransitionsTab',
+            path: '/workflow',
+            tab: {
+              label: 'Workflow',
+              href: '/workflow',
+            },
+          },
+        },
+      },
+    },
   },
   access: {
     read: () => true,

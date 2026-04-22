@@ -39,6 +39,17 @@ export default buildConfig({
     meta: {
       titleSuffix: '— Gymi-Vorbereitung',
     },
+    components: {
+      // Custom nav link above the default collection groups
+      beforeNavLinks: ['/components/admin/CurriculumNavLink'],
+      // Custom view at /admin/curriculum rendering the hierarchy tree
+      views: {
+        curriculum: {
+          Component: '/components/admin/CurriculumTreeView',
+          path: '/curriculum',
+        },
+      },
+    },
   },
   collections: [
     // Admin & media

@@ -1,0 +1,171 @@
+.curriculum-tree {
+  padding-block: var(--base, 24px);
+
+  &__header {
+    margin-bottom: calc(var(--base) * 1.5);
+
+    h1 {
+      margin-block-end: 4px;
+    }
+  }
+
+  &__subtitle {
+    color: var(--theme-elevation-500);
+    margin-block: 0 var(--base);
+    font-size: 0.875rem;
+
+    em {
+      color: var(--theme-warning-600);
+      font-style: normal;
+      font-weight: 500;
+    }
+  }
+
+  &__stats {
+    display: flex;
+    gap: 12px;
+    margin: 0;
+    flex-wrap: wrap;
+
+    > span {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      background: var(--theme-elevation-50);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+    }
+
+    dt {
+      color: var(--theme-elevation-500);
+      display: inline;
+    }
+
+    dd {
+      margin: 0;
+      font-weight: 600;
+    }
+  }
+
+  &__empty {
+    color: var(--theme-elevation-500);
+    font-style: italic;
+    margin: 8px 0 0 12px;
+  }
+
+  &__empty--nested {
+    margin-left: 24px;
+    font-size: 0.8125rem;
+  }
+
+  &__list {
+    list-style: none;
+    padding-inline-start: 0;
+    margin: 0;
+
+    &--root {
+      border-top: 1px solid var(--theme-elevation-100);
+    }
+
+    // Nested lists indent off the left edge of their parent summary
+    details > & {
+      padding-inline-start: 20px;
+      border-inline-start: 1px dashed var(--theme-elevation-150);
+      margin-inline-start: 8px;
+    }
+  }
+
+  &__node {
+    padding-block: 2px;
+
+    details {
+      summary {
+        cursor: pointer;
+        padding-block: 6px;
+        border-radius: 4px;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        // Custom disclosure triangle
+        &::before {
+          content: '▸';
+          color: var(--theme-elevation-400);
+          font-size: 0.75rem;
+          transition: transform 120ms ease;
+          width: 12px;
+          display: inline-block;
+        }
+
+        &:hover {
+          background: var(--theme-elevation-50);
+        }
+
+        // Hide default marker
+        &::-webkit-details-marker {
+          display: none;
+        }
+      }
+
+      &[open] > summary::before {
+        transform: rotate(90deg);
+      }
+    }
+
+    // Concept leaf nodes have no <details> — give them the same left padding
+    // as if they had a disclosure triangle.
+    &--concept {
+      padding-inline-start: 18px;
+
+      .curriculum-tree__label {
+        padding-block: 6px;
+      }
+    }
+  }
+
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    a {
+      color: var(--theme-elevation-900);
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+        color: var(--theme-success-600, #2563eb);
+      }
+    }
+  }
+
+  &__icon {
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  &__meta {
+    color: var(--theme-elevation-500);
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+
+  &__badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+
+    &--daz {
+      background: var(--theme-warning-100, #fef3c7);
+      color: var(--theme-warning-700, #92400e);
+    }
+  }
+}

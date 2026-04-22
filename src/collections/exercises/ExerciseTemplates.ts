@@ -35,6 +35,28 @@ export const ExerciseTemplates: CollectionConfig = {
     ],
     group: '02 · Exercises',
     listSearchableFields: ['promptPattern', 'tags'],
+    components: {
+      views: {
+        edit: {
+          preview: {
+            Component: '/components/admin/ExerciseTemplatePreview',
+            path: '/preview',
+            tab: {
+              label: 'Preview',
+              href: '/preview',
+            },
+          },
+          workflow: {
+            Component: '/components/admin/StatusTransitionsTab',
+            path: '/workflow',
+            tab: {
+              label: 'Workflow',
+              href: '/workflow',
+            },
+          },
+        },
+      },
+    },
   },
   access: {
     read: () => true,

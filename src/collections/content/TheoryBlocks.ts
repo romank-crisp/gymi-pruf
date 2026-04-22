@@ -25,8 +25,22 @@ export const TheoryBlocks: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'concept', 'format', 'l1', 'status', 'version'],
-    group: '03 · Theory & Content',
+    group: '03 · Teaching Material',
     listSearchableFields: ['title'],
+    components: {
+      views: {
+        edit: {
+          workflow: {
+            Component: '/components/admin/StatusTransitionsTab',
+            path: '/workflow',
+            tab: {
+              label: 'Workflow',
+              href: '/workflow',
+            },
+          },
+        },
+      },
+    },
   },
   access: {
     read: () => true,

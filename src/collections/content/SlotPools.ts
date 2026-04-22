@@ -17,7 +17,7 @@ export const SlotPools: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug', 'contentType'],
-    group: '04 · Slot Pools',
+    group: '05 · Slot Pools',
     listSearchableFields: ['name', 'slug', 'contentType'],
   },
   access: {
