@@ -8,10 +8,9 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 
-// Curriculum hierarchy (Domain → Module → Section → Unit → Concept)
+// Curriculum hierarchy (Domain → Module → Unit → Concept)
 import { Domains } from './collections/curriculum/Domains'
 import { Modules } from './collections/curriculum/Modules'
-import { Sections } from './collections/curriculum/Sections'
 import { Units } from './collections/curriculum/Units'
 import { Concepts } from './collections/curriculum/Concepts'
 import { ConceptPrerequisites } from './collections/curriculum/ConceptPrerequisites'
@@ -59,7 +58,6 @@ export default buildConfig({
     // Curriculum
     Domains,
     Modules,
-    Sections,
     Units,
     Concepts,
     ConceptPrerequisites,

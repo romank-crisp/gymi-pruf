@@ -106,61 +106,29 @@ async function main() {
   })
   log(wortartenModule.created, 'module', 'wortarten')
 
-  // ── 4. Sections within Wortarten (3) ──────────────────────────────────
-  console.log('\n→ seeding sections')
-  const sectionSeeds = [
-    {
-      slug: 'kernwortarten',
-      name: 'Kernwortarten',
-      description: 'Nomen, Verb, Adjektiv — die drei tragenden Wortarten',
-      displayOrder: 1,
-    },
-    {
-      slug: 'begleiter-stellvertreter',
-      name: 'Begleiter & Stellvertreter',
-      description: 'Artikel und Pronomen',
-      displayOrder: 2,
-    },
-    {
-      slug: 'verbindungen-rest',
-      name: 'Verbindungen & Rest',
-      description: 'Präposition, Konjunktion, Adverb, Zahlwort, Interjektion',
-      displayOrder: 3,
-    },
-  ] as const
-  const sectionIds: Record<string, number | string> = {}
-  for (const s of sectionSeeds) {
-    const { id, created } = await ensureOne(payload, 'sections', 'slug', s.slug, {
-      ...s,
-      module: wortartenModule.id,
-    })
-    sectionIds[s.slug] = id
-    log(created, 'section', s.slug)
-  }
-
-  // ── 5. Units within each section ──────────────────────────────────────
+  // ── 4. Units within Wortarten module ─────────────────────────────────
   console.log('\n→ seeding units')
-  const unitSeeds: { slug: string; name: string; section: string; displayOrder: number }[] = [
-    { slug: 'nomen', name: 'Nomen', section: 'kernwortarten', displayOrder: 1 },
-    { slug: 'verb', name: 'Verb', section: 'kernwortarten', displayOrder: 2 },
-    { slug: 'adjektiv', name: 'Adjektiv', section: 'kernwortarten', displayOrder: 3 },
-    { slug: 'artikel', name: 'Artikel', section: 'begleiter-stellvertreter', displayOrder: 1 },
-    { slug: 'pronomen', name: 'Pronomen', section: 'begleiter-stellvertreter', displayOrder: 2 },
-    { slug: 'praeposition', name: 'Präposition', section: 'verbindungen-rest', displayOrder: 1 },
-    { slug: 'konjunktion', name: 'Konjunktion', section: 'verbindungen-rest', displayOrder: 2 },
-    { slug: 'adverb', name: 'Adverb', section: 'verbindungen-rest', displayOrder: 3 },
-    { slug: 'zahlwort-interjektion', name: 'Zahlwort & Interjektion', section: 'verbindungen-rest', displayOrder: 4 },
+  const unitSeeds: { slug: string; name: string; displayOrder: number }[] = [
+    { slug: 'nomen', name: 'Nomen', displayOrder: 1 },
+    { slug: 'verb', name: 'Verb', displayOrder: 2 },
+    { slug: 'adjektiv', name: 'Adjektiv', displayOrder: 3 },
+    { slug: 'artikel', name: 'Artikel', displayOrder: 4 },
+    { slug: 'pronomen', name: 'Pronomen', displayOrder: 5 },
+    { slug: 'praeposition', name: 'Präposition', displayOrder: 6 },
+    { slug: 'konjunktion', name: 'Konjunktion', displayOrder: 7 },
+    { slug: 'adverb', name: 'Adverb', displayOrder: 8 },
+    { slug: 'zahlwort-interjektion', name: 'Zahlwort & Interjektion', displayOrder: 9 },
   ]
   const unitIds: Record<string, number | string> = {}
   for (const u of unitSeeds) {
     const { id, created } = await ensureOne(payload, 'units', 'slug', u.slug, {
       slug: u.slug,
       name: u.name,
-      section: sectionIds[u.section],
+      module: wortartenModule.id,
       displayOrder: u.displayOrder,
     })
     unitIds[u.slug] = id
-    log(created, 'unit', `${u.slug} → ${u.section}`)
+    log(created, 'unit', `${u.slug}`)
   }
 
   // ── 6. Concepts under Nomen (5) ───────────────────────────────────────

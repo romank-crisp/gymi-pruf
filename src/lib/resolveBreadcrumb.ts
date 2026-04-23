@@ -5,7 +5,7 @@ import type { Payload } from 'payload'
  * walking upward through the curriculum tree.
  *
  * The tree is:
- *   domains → modules → sections → units → concepts
+ *   domains → modules → units → concepts
  *
  * An anchor can point at any level. The returned `path` always starts at
  * domain (if reachable) and ends at the anchor's own entity.
@@ -17,7 +17,7 @@ export type AnchorValue =
   | undefined
 
 export type BreadcrumbStep = {
-  level: 'domain' | 'module' | 'section' | 'unit' | 'concept'
+  level: 'domain' | 'module' | 'unit' | 'concept'
   id: number | string
   name: string
   slug?: string
@@ -26,7 +26,6 @@ export type BreadcrumbStep = {
 const LEVEL_BY_COLLECTION: Record<string, BreadcrumbStep['level']> = {
   domains: 'domain',
   modules: 'module',
-  sections: 'section',
   units: 'unit',
   concepts: 'concept',
 }
@@ -72,9 +71,7 @@ export async function resolveBreadcrumb(
     // Walk upward
     if (cursor.collection === 'concepts' && doc.unit != null) {
       cursor = { collection: 'units', id: toId(doc.unit) }
-    } else if (cursor.collection === 'units' && doc.section != null) {
-      cursor = { collection: 'sections', id: toId(doc.section) }
-    } else if (cursor.collection === 'sections' && doc.module != null) {
+    } else if (cursor.collection === 'units' && doc.module != null) {
       cursor = { collection: 'modules', id: toId(doc.module) }
     } else if (cursor.collection === 'modules' && doc.domain != null) {
       cursor = { collection: 'domains', id: toId(doc.domain) }

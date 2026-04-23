@@ -71,7 +71,6 @@ export interface Config {
     media: Media;
     domains: Domain;
     modules: Module;
-    sections: Section;
     units: Unit;
     concepts: Concept;
     'concept-prerequisites': ConceptPrerequisite;
@@ -93,7 +92,6 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     domains: DomainsSelect<false> | DomainsSelect<true>;
     modules: ModulesSelect<false> | ModulesSelect<true>;
-    sections: SectionsSelect<false> | SectionsSelect<true>;
     units: UnitsSelect<false> | UnitsSelect<true>;
     concepts: ConceptsSelect<false> | ConceptsSelect<true>;
     'concept-prerequisites': ConceptPrerequisitesSelect<false> | ConceptPrerequisitesSelect<true>;
@@ -227,27 +225,13 @@ export interface Module {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "sections".
- */
-export interface Section {
-  id: number;
-  name: string;
-  slug: string;
-  module: number | Module;
-  description?: string | null;
-  displayOrder: number;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "units".
  */
 export interface Unit {
   id: number;
   name: string;
   slug: string;
-  section: number | Section;
+  module: number | Module;
   description?: string | null;
   displayOrder: number;
   updatedAt: string;
@@ -343,10 +327,6 @@ export interface ExerciseTemplate {
         value: number | Module;
       }
     | {
-        relationTo: 'sections';
-        value: number | Section;
-      }
-    | {
         relationTo: 'units';
         value: number | Unit;
       }
@@ -367,10 +347,6 @@ export interface ExerciseTemplate {
           | {
               relationTo: 'modules';
               value: number | Module;
-            }
-          | {
-              relationTo: 'sections';
-              value: number | Section;
             }
           | {
               relationTo: 'units';
@@ -669,10 +645,6 @@ export interface PayloadLockedDocument {
         value: number | Module;
       } | null)
     | ({
-        relationTo: 'sections';
-        value: number | Section;
-      } | null)
-    | ({
         relationTo: 'units';
         value: number | Unit;
       } | null)
@@ -823,25 +795,12 @@ export interface ModulesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "sections_select".
- */
-export interface SectionsSelect<T extends boolean = true> {
-  name?: T;
-  slug?: T;
-  module?: T;
-  description?: T;
-  displayOrder?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "units_select".
  */
 export interface UnitsSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
-  section?: T;
+  module?: T;
   description?: T;
   displayOrder?: T;
   updatedAt?: T;

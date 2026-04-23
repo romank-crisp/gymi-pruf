@@ -2,17 +2,17 @@ import type { CollectionConfig } from 'payload'
 import { autoSlug } from '../../hooks/autoSlug'
 
 /**
- * Unit — one part-of-speech or narrow skill area within a section.
+ * Unit — one part-of-speech or narrow skill area within a module.
  *
- * e.g. within Kernwortarten: Nomen, Verb, Adjektiv.
- * ~60 units total across the full curriculum.
+ * e.g. within Wortarten: Nomen, Verb, Adjektiv.
+ * ~47 units total across the full curriculum.
  */
 export const Units: CollectionConfig = {
   slug: 'units',
   labels: { singular: 'Unit', plural: 'Units' },
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'slug', 'section', 'displayOrder'],
+    defaultColumns: ['name', 'slug', 'module', 'displayOrder'],
     group: '01 · Curriculum',
     defaultSort: 'displayOrder',
     listSearchableFields: ['name', 'slug'],
@@ -34,9 +34,9 @@ export const Units: CollectionConfig = {
       hooks: { beforeValidate: [autoSlug] },
     },
     {
-      name: 'section',
+      name: 'module',
       type: 'relationship',
-      relationTo: 'sections',
+      relationTo: 'modules',
       required: true,
       index: true,
     },

@@ -21,13 +21,12 @@ beforeAll(async () => {
 })
 
 describe('Phase 1 content schema', () => {
-  it('has all 13 collections registered', async () => {
+  it('has all registered collections', async () => {
     const slugs = [
       'users',
       'media',
       'domains',
       'modules',
-      'sections',
       'units',
       'concepts',
       'concept-prerequisites',

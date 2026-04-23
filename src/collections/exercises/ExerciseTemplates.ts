@@ -8,7 +8,7 @@ import {
 import { enforceStatusTransition } from '../../hooks/enforceStatusTransition'
 import { validateAnchors } from '../../hooks/validateAnchors'
 
-const ANCHOR_RELATION_TO = ['domains', 'modules', 'sections', 'units', 'concepts'] as const
+const ANCHOR_RELATION_TO = ['domains', 'modules', 'units', 'concepts'] as const
 
 /**
  * ExerciseTemplate — a single reusable exercise pattern.
