@@ -132,6 +132,39 @@ export type RawExerciseTemplate = {
   [key: string]: unknown
 }
 
+const VALID_COGNITIVE_TYPES = new Set([
+  'recognition',
+  'classification',
+  'generation',
+  'transformation',
+  'application',
+])
+
+/**
+ * Maps common model-generated cognitiveType values that fall outside the
+ * schema's enum to the nearest valid value. Returns the input unchanged if it
+ * is already valid or if no mapping is known.
+ */
+export function coerceCognitiveType(raw: unknown): string {
+  if (typeof raw !== 'string') return 'recognition'
+  if (VALID_COGNITIVE_TYPES.has(raw)) return raw
+  // Common model drift mappings
+  const map: Record<string, string> = {
+    analysis: 'classification',
+    identification: 'recognition',
+    comprehension: 'recognition',
+    recall: 'recognition',
+    production: 'generation',
+    synthesis: 'generation',
+    evaluation: 'application',
+    practice: 'application',
+    ordering: 'transformation',
+    reordering: 'transformation',
+    sorting: 'classification',
+  }
+  return map[raw.toLowerCase()] ?? 'recognition'
+}
+
 const VALID_FORMATS = new Set([
   'multiple_choice',
   'multi_select',

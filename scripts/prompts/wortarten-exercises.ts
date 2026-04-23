@@ -13,7 +13,7 @@
  * {
  *   format:         "multiple_choice" | "fill_blank"
  *   difficulty:     1|2|3|4|5
- *   cognitiveType:  "recognition" | "classification" | "application"
+ *   cognitiveType:  "recognition" | "classification" | "generation" | "transformation" | "application"
  *   promptPattern:  string  — the learner-facing question; blanks as ___
  *   answerSpec: {
  *     correct_answer: string   — the single correct answer
@@ -101,7 +101,7 @@ Return a JSON object:
     {
       "format": "multiple_choice",
       "difficulty": 1,
-      "cognitiveType": "recognition",
+      "cognitiveType": "recognition",   ← MUST be one of: recognition | classification | generation | transformation | application
       "promptPattern": "Welcher Artikel passt? ___ Tisch",
       "answerSpec": {
         "correct_answer": "der",

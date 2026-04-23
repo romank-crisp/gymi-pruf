@@ -24,7 +24,11 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { getPayload, type Payload } from 'payload'
 import config from '../src/payload.config'
-import { validateExerciseTemplate, type RawExerciseTemplate } from '../src/lib/autoValidate'
+import {
+  validateExerciseTemplate,
+  coerceCognitiveType,
+  type RawExerciseTemplate,
+} from '../src/lib/autoValidate'
 import {
   buildExerciseSystemPrompt,
   buildExerciseUserPrompt,
@@ -146,7 +150,7 @@ async function insertExercise(
 
   const data: Record<string, unknown> = {
     format: raw.format,
-    cognitiveType: raw.cognitiveType ?? 'recognition',
+    cognitiveType: coerceCognitiveType(raw.cognitiveType),
     difficulty: Number(raw.difficulty),
     promptPattern: String(raw.promptPattern),
     answerSpec: spec,
