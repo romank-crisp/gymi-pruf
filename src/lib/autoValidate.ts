@@ -166,7 +166,7 @@ export function coerceCognitiveType(raw: unknown): string {
 }
 
 const VALID_FORMATS = new Set([
-  'multiple_choice',
+  'single_choice',
   'multi_select',
   'fill_blank',
   'tap_text',
@@ -215,13 +215,13 @@ export function validateExerciseTemplate(raw: RawExerciseTemplate): ValidationRe
     errors.push('Missing or invalid "answerSpec" (must be an object)')
   } else {
     const spec = raw.answerSpec as Record<string, unknown>
-    // For multiple_choice / fill_blank we expect a correct answer
-    if (raw.format === 'multiple_choice' || raw.format === 'fill_blank') {
+    // For single_choice / fill_blank we expect a correct answer
+    if (raw.format === 'single_choice' || raw.format === 'fill_blank') {
       if (!spec.correct && !spec.correct_slot && !spec.correct_answer) {
         errors.push('answerSpec must have a "correct", "correct_slot", or "correct_answer" field')
       }
-      if (raw.format === 'multiple_choice' && !Array.isArray(spec.options)) {
-        errors.push('answerSpec.options must be an array for multiple_choice format')
+      if (raw.format === 'single_choice' && !Array.isArray(spec.options)) {
+        errors.push('answerSpec.options must be an array for single_choice format')
       }
     }
   }

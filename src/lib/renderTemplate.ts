@@ -9,7 +9,7 @@
  * Pure function — accepts already-fetched pools and items to keep it
  * server/client agnostic. The caller is responsible for loading data.
  *
- * Phase 2a preview scope: multiple_choice templates render fully; other
+ * Phase 2a preview scope: single_choice templates render fully; other
  * formats render the substituted prompt and a format badge (full
  * format-specific rendering is a later phase when the learner app lands).
  */

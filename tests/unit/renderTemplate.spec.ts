@@ -126,7 +126,7 @@ describe('pickSlotItems', () => {
 describe('renderTemplate — full pipeline', () => {
   const template: ExerciseTemplateLike = {
     id: 1,
-    format: 'multiple_choice',
+    format: 'single_choice',
     promptPattern: 'Welcher Artikel passt? ___ {NOUN}',
     answerSpec: { correct_slot: 'NOUN.metadata.artikel', options: ['der', 'die', 'das'] },
     slotDefinitions: [
@@ -148,7 +148,7 @@ describe('renderTemplate — full pipeline', () => {
       rand: seeded(1),
     })
 
-    expect(result.format).toBe('multiple_choice')
+    expect(result.format).toBe('single_choice')
     expect(result.prompt).toMatch(/Welcher Artikel passt\? ___ (Tisch|Lampe)/)
     expect(result.correctAnswer).toMatch(/^(der|die)$/)
     expect(result.options).toEqual(['der', 'die', 'das'])

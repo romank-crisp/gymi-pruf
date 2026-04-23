@@ -70,7 +70,7 @@ export const theoryFormatOptions = THEORY_FORMATS.map((value) => ({
 
 // ── Exercise formats ─────────────────────────────────────────────────────
 export const EXERCISE_FORMATS = [
-  'multiple_choice',
+  'single_choice',
   'multi_select',
   'fill_blank',
   'tap_text',

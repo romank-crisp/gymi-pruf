@@ -364,7 +364,7 @@ export interface ExerciseTemplate {
    */
   exerciseGroup?: (number | null) | ExerciseGroup;
   format:
-    | 'multiple_choice'
+    | 'single_choice'
     | 'multi_select'
     | 'fill_blank'
     | 'tap_text'

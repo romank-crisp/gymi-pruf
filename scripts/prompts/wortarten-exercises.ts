@@ -2,22 +2,22 @@
  * Prompt builder for generating AI-native Wortarten exercise templates.
  *
  * Targets the most common DaZ-relevant exercise types for Wortarten:
- *   - multiple_choice : identify the correct artikel/Wortart from options
+ *   - single_choice : identify the correct artikel/Wortart from options
  *   - fill_blank      : complete a sentence with the right form
  *   - tap_text        : (future) tap words matching a Wortart
  *
- * Phase 1 generates only multiple_choice and fill_blank because they can
+ * Phase 1 generates only single_choice and fill_blank because they can
  * be fully auto-validated (clear correct answer, enumerable wrong options).
  *
  * Output contract per exercise:
  * {
- *   format:         "multiple_choice" | "fill_blank"
+ *   format:         "single_choice" | "fill_blank"
  *   difficulty:     1|2|3|4|5
  *   cognitiveType:  "recognition" | "classification" | "generation" | "transformation" | "application"
  *   promptPattern:  string  — the learner-facing question; blanks as ___
  *   answerSpec: {
  *     correct_answer: string   — the single correct answer
- *     options:        string[] — 3–4 choices (for multiple_choice)
+ *     options:        string[] — 3–4 choices (for single_choice)
  *   }
  *   hintLadder: [
  *     { text: string },  // gentle hint
@@ -88,7 +88,7 @@ Exercise pattern: "Welcher Artikel passt? ___ [Noun]" with options [der, die, da
 Include a variety of nouns from common to tricky (e.g. -e endings, compound nouns, -nis/-heit/-keit suffixes).`,
 
     plural: `Focus: forming or identifying the correct Plural of a Nomen.
-Exercise pattern: mix of "Wie heißt der Plural von [Noun]?" (multiple_choice) and
+Exercise pattern: mix of "Wie heißt der Plural von [Noun]?" (single_choice) and
 "Ergänze: Ich sehe zwei ___." (fill_blank).
 Include irregular plurals (Haus→Häuser, Kind→Kinder) as well as regular ones.`,
 
@@ -120,7 +120,7 @@ Return a JSON object:
 {
   "exercises": [
     {
-      "format": "multiple_choice",
+      "format": "single_choice",
       "difficulty": 1,
       "cognitiveType": "recognition",   ← MUST be one of: recognition | classification | generation | transformation | application
       "promptPattern": "Welcher Artikel passt? ___ Tisch",

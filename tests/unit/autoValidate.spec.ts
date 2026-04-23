@@ -120,7 +120,7 @@ describe('validateNounSlotItem', () => {
 
 describe('validateExerciseTemplate', () => {
   const good: RawExerciseTemplate = {
-    format: 'multiple_choice',
+    format: 'single_choice',
     difficulty: 2,
     cognitiveType: 'recognition',
     promptPattern: 'Welcher Artikel passt? ___ Tisch',
@@ -157,7 +157,7 @@ describe('validateExerciseTemplate', () => {
 
   it('accepts all known formats', () => {
     const formats = [
-      'multiple_choice',
+      'single_choice',
       'multi_select',
       'fill_blank',
       'tap_text',
@@ -182,10 +182,10 @@ describe('validateExerciseTemplate', () => {
     expect(result.errors.some((e) => /answerSpec/i.test(e))).toBe(true)
   })
 
-  it('rejects multiple_choice without options', () => {
+  it('rejects single_choice without options', () => {
     const result = validateExerciseTemplate({
       ...good,
-      format: 'multiple_choice',
+      format: 'single_choice',
       answerSpec: { correct_answer: 'der' }, // no options array
     })
     expect(result.valid).toBe(false)

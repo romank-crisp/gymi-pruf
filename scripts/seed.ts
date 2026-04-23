@@ -263,7 +263,7 @@ async function main() {
       collection: 'exercise-templates',
       data: {
         exerciseGroup: groupIds['genus-intro'],
-        format: 'multiple_choice',
+        format: 'single_choice',
         cognitiveType: 'recognition',
         difficulty: 1,
         promptPattern: 'Welcher Artikel passt? ___ {NOUN}',
