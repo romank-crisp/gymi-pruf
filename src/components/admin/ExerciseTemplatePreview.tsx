@@ -6,7 +6,15 @@ import {
   type SlotDefinition,
   type SlotItemLike,
 } from '../../lib/renderTemplate'
+import { resolveBreadcrumb, type AnchorValue, type BreadcrumbStep } from '../../lib/resolveBreadcrumb'
 import './ExerciseTemplatePreview.scss'
+
+function renderBreadcrumb(steps: BreadcrumbStep[]): string {
+  if (steps.length === 0) return '—'
+  return steps
+    .map((s) => `${s.level.charAt(0).toUpperCase() + s.level.slice(1)} “${s.name}”`)
+    .join(' › ')
+}
 
 /**
  * Custom edit-view tab for ExerciseTemplates.
@@ -51,6 +59,19 @@ export default async function ExerciseTemplatePreview({
 
   const preview = renderTemplate(template, { itemsByPoolSlug })
 
+  // Resolve curriculum breadcrumbs for primary + secondary anchors
+  const primaryTrail = await resolveBreadcrumb(
+    payload,
+    (template as unknown as { primaryAnchor?: AnchorValue }).primaryAnchor,
+  )
+  const secondaryRaw = ((template as unknown as {
+    secondaryAnchors?: Array<{ anchor?: AnchorValue }>
+  }).secondaryAnchors ?? []) as Array<{ anchor?: AnchorValue }>
+  const secondaryTrails: BreadcrumbStep[][] = []
+  for (const row of secondaryRaw) {
+    secondaryTrails.push(await resolveBreadcrumb(payload, row.anchor))
+  }
+
   const formatLabel = String(preview.format).replace(/_/g, ' ')
 
   return (
@@ -62,6 +83,20 @@ export default async function ExerciseTemplatePreview({
           page to see different slot fills.
         </p>
       </header>
+
+      <section className="template-preview__anchors">
+        <h3>Curriculum anchors</h3>
+        <dl className="template-preview__feedback">
+          <dt>Primary</dt>
+          <dd>{renderBreadcrumb(primaryTrail)}</dd>
+          {secondaryTrails.map((trail, i) => (
+            <>
+              <dt key={`dt-${i}`}>Secondary #{i + 1}</dt>
+              <dd key={`dd-${i}`}>{renderBreadcrumb(trail)}</dd>
+            </>
+          ))}
+        </dl>
+      </section>
 
       {preview.warnings.length > 0 && (
         <div className="template-preview__warnings">

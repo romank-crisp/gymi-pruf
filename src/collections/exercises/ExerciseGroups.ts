@@ -3,18 +3,18 @@ import { autoSlug } from '../../hooks/autoSlug'
 import { exercisePhaseOptions } from '../../content/enums'
 
 /**
- * ExerciseGroup — a bundle of exercises within a concept, organised by
- * learning phase.
+ * ExerciseGroup — a phase-bundle attribute for exercise templates.
  *
- * A single concept typically has four groups:
+ * Groups are metadata, not structure. They bundle templates into a
+ * learning phase (intro / practice / review / checkpoint) with a
+ * target mastery threshold. Curriculum position lives on the template
+ * itself (`primaryAnchor` + `secondaryAnchors`), not here.
+ *
+ * Typical phases:
  *   - intro      (guided, easy, ~8 items)
  *   - practice   (adaptive, ~25 items)
  *   - review     (spaced, ~12 items)
  *   - checkpoint (mastery test, ~10 items)
- *
- * `targetItems` is the number of items the learner must reach to complete
- * the phase — not the pool size. The pool (slot-filled templates) can
- * produce far more unique exercises than targetItems.
  */
 export const ExerciseGroups: CollectionConfig = {
   slug: 'exercise-groups',
@@ -38,16 +38,20 @@ export const ExerciseGroups: CollectionConfig = {
       name: 'slug',
       type: 'text',
       required: true,
+      unique: true,
       index: true,
       hooks: { beforeValidate: [autoSlug] },
-      admin: { description: 'Unique per concept (not globally).' },
+      admin: { description: 'Globally unique.' },
     },
     {
       name: 'concept',
       type: 'relationship',
       relationTo: 'concepts',
-      required: true,
       index: true,
+      admin: {
+        description:
+          'Optional. Groups are phase-bundle attributes, not structural. Templates carry their own curriculum anchor.',
+      },
     },
     {
       name: 'phase',
@@ -75,6 +79,5 @@ export const ExerciseGroups: CollectionConfig = {
       defaultValue: 0,
     },
   ],
-  indexes: [{ fields: ['concept', 'slug'], unique: true }],
   timestamps: true,
 }

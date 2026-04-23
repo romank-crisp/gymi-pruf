@@ -6,17 +6,21 @@
  * `exercise-templates` collection as `draft`, ready for teacher review.
  *
  * Usage:
- *   pnpm generate:exercises
- *   pnpm generate:exercises -- --topic=genus --count=20
- *   pnpm generate:exercises -- --topic=wortart --count=10 --diff-min=2 --diff-max=4
- *   pnpm generate:exercises -- --topic=genus --dry-run --verbose
+ *   pnpm generate:exercises -- --anchor=concept:genus-bestimmen --topic=genus --count=20
+ *   pnpm generate:exercises -- --anchor=unit:praeposition --topic=wortart --count=10
+ *   pnpm generate:exercises -- --anchor=concept:genus-bestimmen --secondary=unit:nomen --count=5
+ *   pnpm generate:exercises -- --anchor=concept:genus-bestimmen --dry-run --verbose
  *
  * Flags:
+ *   --anchor=LEVEL:SLUG Required. Primary curriculum anchor.
+ *                       LEVEL is one of: domain, module, section, unit, concept.
+ *                       SLUG is the collection slug of the target entity.
+ *   --secondary=LEVEL:SLUG[,LEVEL:SLUG]  Optional, max 2 entries.
  *   --topic=TOPIC       genus | plural | wortart | kasus  (default: genus)
  *   --count=N           Number of exercises to request  (default: 20)
  *   --diff-min=N        Minimum difficulty 1–5          (default: 1)
  *   --diff-max=N        Maximum difficulty 1–5          (default: 3)
- *   --group=SLUG        exercise-group slug to link to  (optional)
+ *   --group=SLUG        exercise-group slug to link to  (optional attribute only)
  *   --dry-run           Validate only; do not write
  *   --verbose           Print each exercise as processed
  */
@@ -42,6 +46,29 @@ import {
 type Topic = 'genus' | 'plural' | 'wortart' | 'kasus'
 const VALID_TOPICS = new Set<Topic>(['genus', 'plural', 'wortart', 'kasus'])
 
+type AnchorLevel = 'domain' | 'module' | 'section' | 'unit' | 'concept'
+const LEVEL_TO_COLLECTION: Record<AnchorLevel, string> = {
+  domain: 'domains',
+  module: 'modules',
+  section: 'sections',
+  unit: 'units',
+  concept: 'concepts',
+}
+const VALID_LEVELS = new Set<AnchorLevel>(['domain', 'module', 'section', 'unit', 'concept'])
+
+type AnchorSpec = { level: AnchorLevel; slug: string }
+
+function parseAnchorArg(raw: string, flagName: string): AnchorSpec {
+  const [level, slug] = raw.split(':')
+  if (!level || !slug || !VALID_LEVELS.has(level as AnchorLevel)) {
+    console.error(
+      `Invalid --${flagName}="${raw}". Expected LEVEL:SLUG with LEVEL in ${[...VALID_LEVELS].join('|')}.`,
+    )
+    process.exit(1)
+  }
+  return { level: level as AnchorLevel, slug }
+}
+
 function parseArgs() {
   const args = process.argv.slice(2)
   const get = (flag: string, fallback: string) =>
@@ -53,12 +80,36 @@ function parseArgs() {
     process.exit(1)
   }
 
+  const anchorRaw = get('anchor', '')
+  if (!anchorRaw) {
+    console.error(
+      'Missing required --anchor=LEVEL:SLUG flag (e.g. --anchor=concept:genus-bestimmen).',
+    )
+    process.exit(1)
+  }
+  const primary = parseAnchorArg(anchorRaw, 'anchor')
+
+  const secondaryRaw = get('secondary', '')
+  const secondaries: AnchorSpec[] = secondaryRaw
+    ? secondaryRaw
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .map((s) => parseAnchorArg(s, 'secondary'))
+    : []
+  if (secondaries.length > 2) {
+    console.error(`Too many --secondary anchors (${secondaries.length}). Max is 2.`)
+    process.exit(1)
+  }
+
   return {
     topic: topicRaw as Topic,
     count: parseInt(get('count', '20'), 10),
     diffMin: parseInt(get('diff-min', '1'), 10),
     diffMax: parseInt(get('diff-max', '3'), 10),
     groupSlug: get('group', ''),
+    primary,
+    secondaries,
     dryRun: args.includes('--dry-run'),
     verbose: args.includes('--verbose'),
   }
@@ -83,6 +134,39 @@ async function resolveGroupId(
     return null
   }
   return (result.docs[0] as { id: number | string }).id
+}
+
+type PolymorphicAnchor = { relationTo: string; value: number | string }
+
+type ResolvedAnchor = {
+  spec: AnchorSpec
+  collection: string
+  id: number | string
+  name: string
+}
+
+async function resolveAnchor(payload: Payload, spec: AnchorSpec): Promise<ResolvedAnchor> {
+  const collection = LEVEL_TO_COLLECTION[spec.level]
+  const result = await payload.find({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    collection: collection as any,
+    where: { slug: { equals: spec.slug } },
+    limit: 1,
+  })
+  if (result.totalDocs === 0) {
+    throw new Error(`Anchor not found: ${spec.level} with slug "${spec.slug}" in ${collection}.`)
+  }
+  const doc = result.docs[0] as { id: number | string; name?: string; slug?: string }
+  return {
+    spec,
+    collection,
+    id: doc.id,
+    name: doc.name ?? doc.slug ?? String(doc.id),
+  }
+}
+
+function toPolymorphicAnchor(r: ResolvedAnchor): PolymorphicAnchor {
+  return { relationTo: r.collection, value: r.id }
 }
 
 // ---------------------------------------------------------------------------
@@ -138,6 +222,8 @@ async function generateExercises(
 async function insertExercise(
   payload: Payload,
   raw: RawExerciseTemplate,
+  primaryAnchor: PolymorphicAnchor,
+  secondaryAnchors: PolymorphicAnchor[],
   groupId: number | string | null,
 ): Promise<void> {
   const spec = raw.answerSpec as Record<string, unknown>
@@ -149,6 +235,8 @@ async function insertExercise(
     : []
 
   const data: Record<string, unknown> = {
+    primaryAnchor,
+    secondaryAnchors: secondaryAnchors.map((a) => ({ anchor: a })),
     format: raw.format,
     cognitiveType: coerceCognitiveType(raw.cognitiveType),
     difficulty: Number(raw.difficulty),
@@ -179,6 +267,12 @@ async function main() {
   console.log('║  generate-exercises — AI-native template generation  ║')
   console.log('╚══════════════════════════════════════════════════════╝')
   console.log(`  topic      : ${opts.topic}`)
+  console.log(`  anchor     : ${opts.primary.level}:${opts.primary.slug}`)
+  if (opts.secondaries.length > 0) {
+    console.log(
+      `  secondary  : ${opts.secondaries.map((s) => `${s.level}:${s.slug}`).join(', ')}`,
+    )
+  }
   console.log(`  count      : ${opts.count}`)
   console.log(`  difficulty : ${opts.diffMin}–${opts.diffMax}`)
   console.log(`  group      : ${opts.groupSlug || '(none)'}`)
@@ -195,12 +289,33 @@ async function main() {
 
   const groupId = await resolveGroupId(payload, opts.groupSlug)
 
+  // ── Resolve anchors ───────────────────────────────────────────────────
+  const primaryResolved = await resolveAnchor(payload, opts.primary)
+  console.log(
+    `  primary anchor → ${primaryResolved.collection} #${primaryResolved.id} (${primaryResolved.name})`,
+  )
+  const secondaryResolved: ResolvedAnchor[] = []
+  for (const s of opts.secondaries) {
+    const r = await resolveAnchor(payload, s)
+    console.log(`  secondary anchor → ${r.collection} #${r.id} (${r.name})`)
+    secondaryResolved.push(r)
+  }
+  const primaryAnchor = toPolymorphicAnchor(primaryResolved)
+  const secondaryAnchors = secondaryResolved.map(toPolymorphicAnchor)
+
   // ── Generate ──────────────────────────────────────────────────────────
   const rawItems = await generateExercises(client, {
     count: opts.count,
     topic: opts.topic,
     difficultyMin: opts.diffMin,
     difficultyMax: opts.diffMax,
+    anchorContext: {
+      primary: { level: primaryResolved.spec.level, name: primaryResolved.name },
+      secondaries: secondaryResolved.map((r) => ({
+        level: r.spec.level,
+        name: r.name,
+      })),
+    },
   })
 
   console.log(`\n→ received ${rawItems.length} exercises from API`)
@@ -234,7 +349,7 @@ async function main() {
       continue
     }
 
-    await insertExercise(payload, raw, groupId)
+    await insertExercise(payload, raw, primaryAnchor, secondaryAnchors, groupId)
     stats.inserted++
     if (opts.verbose) {
       console.log(`  ✓ INS   "${String(raw.promptPattern ?? '').slice(0, 60)}" (diff ${raw.difficulty})`)

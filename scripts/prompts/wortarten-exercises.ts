@@ -30,6 +30,14 @@
  * }
  */
 
+export type AnchorContext = {
+  primary: { level: 'domain' | 'module' | 'section' | 'unit' | 'concept'; name: string }
+  secondaries: Array<{
+    level: 'domain' | 'module' | 'section' | 'unit' | 'concept'
+    name: string
+  }>
+}
+
 export type ExerciseGenerationOptions = {
   /** Number of exercises to generate. */
   count: number
@@ -38,6 +46,8 @@ export type ExerciseGenerationOptions = {
   /** Difficulty range to generate. */
   difficultyMin?: number
   difficultyMax?: number
+  /** Curriculum anchors — the model uses these to stay on-topic. */
+  anchorContext?: AnchorContext
 }
 
 export function buildExerciseSystemPrompt(): string {
@@ -58,8 +68,19 @@ Writing style rules (enforced — never deviate):
 Output ONLY valid JSON. No markdown fences. No commentary before or after.`
 }
 
+function formatAnchorContext(ctx: AnchorContext | undefined): string {
+  if (!ctx) return ''
+  const primaryLine = `- Primary: ${ctx.primary.level} "${ctx.primary.name}"`
+  const secondaryLines = ctx.secondaries
+    .map((s) => `- Secondary: ${s.level} "${s.name}"`)
+    .join('\n')
+  return `\nCurriculum anchor (all exercises must stay within this scope):\n${primaryLine}${
+    secondaryLines ? '\n' + secondaryLines : ''
+  }\n\nEvery generated exercise must clearly target the primary anchor. If secondary anchors are listed, exercises may additionally exercise those concepts, but the primary is the main focus.\n`
+}
+
 export function buildExerciseUserPrompt(opts: ExerciseGenerationOptions): string {
-  const { count, topic, difficultyMin = 1, difficultyMax = 3 } = opts
+  const { count, topic, difficultyMin = 1, difficultyMax = 3, anchorContext } = opts
 
   const topicGuide: Record<string, string> = {
     genus: `Focus: identifying the correct definite artikel (der/die/das) for a given Nomen.
@@ -82,7 +103,7 @@ Focus on the classic DaZ confusion: Akkusativ vs Dativ after two-way Präpositio
   }
 
   return `Generate exactly ${count} German grammar exercises on the topic "${topic}".
-
+${formatAnchorContext(anchorContext)}
 ${topicGuide[topic]}
 
 Difficulty scale for this topic:

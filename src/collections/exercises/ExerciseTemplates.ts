@@ -6,6 +6,9 @@ import {
   generationModeOptions,
 } from '../../content/enums'
 import { enforceStatusTransition } from '../../hooks/enforceStatusTransition'
+import { validateAnchors } from '../../hooks/validateAnchors'
+
+const ANCHOR_RELATION_TO = ['domains', 'modules', 'sections', 'units', 'concepts'] as const
 
 /**
  * ExerciseTemplate — a single reusable exercise pattern.
@@ -27,7 +30,7 @@ export const ExerciseTemplates: CollectionConfig = {
     useAsTitle: 'promptPattern',
     defaultColumns: [
       'promptPattern',
-      'exerciseGroup',
+      'primaryAnchor',
       'format',
       'cognitiveType',
       'difficulty',
@@ -65,15 +68,47 @@ export const ExerciseTemplates: CollectionConfig = {
     delete: ({ req: { user } }) => user?.role === 'admin',
   },
   hooks: {
-    beforeChange: [enforceStatusTransition],
+    beforeChange: [enforceStatusTransition, validateAnchors],
   },
   fields: [
+    {
+      name: 'primaryAnchor',
+      type: 'relationship',
+      relationTo: [...ANCHOR_RELATION_TO],
+      required: true,
+      index: true,
+      admin: {
+        description:
+          'Primary curriculum anchor. Anchor at the narrowest level that fits (concept for single-concept exercises; unit/section/module/domain for cross-concept exercises).',
+      },
+    },
+    {
+      name: 'secondaryAnchors',
+      type: 'array',
+      labels: { singular: 'Secondary anchor', plural: 'Secondary anchors' },
+      maxRows: 2,
+      admin: {
+        description:
+          'Optional cross-references (max 2). Use when an exercise genuinely spans multiple concepts, units, or domains.',
+      },
+      fields: [
+        {
+          name: 'anchor',
+          type: 'relationship',
+          relationTo: [...ANCHOR_RELATION_TO],
+          required: true,
+        },
+      ],
+    },
     {
       name: 'exerciseGroup',
       type: 'relationship',
       relationTo: 'exercise-groups',
-      required: true,
       index: true,
+      admin: {
+        description:
+          'Optional phase-bundle attribute (intro / practice / review / checkpoint). Not structural — curriculum position comes from primaryAnchor.',
+      },
     },
     {
       type: 'row',

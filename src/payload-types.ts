@@ -308,10 +308,13 @@ export interface ExerciseGroup {
   id: number;
   name: string;
   /**
-   * Unique per concept (not globally).
+   * Globally unique.
    */
   slug: string;
-  concept: number | Concept;
+  /**
+   * Optional. Groups are phase-bundle attributes, not structural. Templates carry their own curriculum anchor.
+   */
+  concept?: (number | null) | Concept;
   phase: 'intro' | 'practice' | 'review' | 'checkpoint';
   /**
    * Number of correct items needed to complete this phase for a learner.
@@ -327,7 +330,63 @@ export interface ExerciseGroup {
  */
 export interface ExerciseTemplate {
   id: number;
-  exerciseGroup: number | ExerciseGroup;
+  /**
+   * Primary curriculum anchor. Anchor at the narrowest level that fits (concept for single-concept exercises; unit/section/module/domain for cross-concept exercises).
+   */
+  primaryAnchor:
+    | {
+        relationTo: 'domains';
+        value: number | Domain;
+      }
+    | {
+        relationTo: 'modules';
+        value: number | Module;
+      }
+    | {
+        relationTo: 'sections';
+        value: number | Section;
+      }
+    | {
+        relationTo: 'units';
+        value: number | Unit;
+      }
+    | {
+        relationTo: 'concepts';
+        value: number | Concept;
+      };
+  /**
+   * Optional cross-references (max 2). Use when an exercise genuinely spans multiple concepts, units, or domains.
+   */
+  secondaryAnchors?:
+    | {
+        anchor:
+          | {
+              relationTo: 'domains';
+              value: number | Domain;
+            }
+          | {
+              relationTo: 'modules';
+              value: number | Module;
+            }
+          | {
+              relationTo: 'sections';
+              value: number | Section;
+            }
+          | {
+              relationTo: 'units';
+              value: number | Unit;
+            }
+          | {
+              relationTo: 'concepts';
+              value: number | Concept;
+            };
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional phase-bundle attribute (intro / practice / review / checkpoint). Not structural — curriculum position comes from primaryAnchor.
+   */
+  exerciseGroup?: (number | null) | ExerciseGroup;
   format:
     | 'multiple_choice'
     | 'multi_select'
@@ -834,6 +893,13 @@ export interface ExerciseGroupsSelect<T extends boolean = true> {
  * via the `definition` "exercise-templates_select".
  */
 export interface ExerciseTemplatesSelect<T extends boolean = true> {
+  primaryAnchor?: T;
+  secondaryAnchors?:
+    | T
+    | {
+        anchor?: T;
+        id?: T;
+      };
   exerciseGroup?: T;
   format?: T;
   cognitiveType?: T;
