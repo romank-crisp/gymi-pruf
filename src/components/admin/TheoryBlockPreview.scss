@@ -1,0 +1,305 @@
+.theory-preview {
+  padding-block: var(--base, 24px);
+
+  &__header {
+    margin-bottom: calc(var(--base) * 1.25);
+
+    h2 {
+      margin-block: 0 4px;
+    }
+  }
+
+  &__subtitle {
+    color: var(--theme-elevation-500);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  &__meta-top {
+    margin-bottom: calc(var(--base) * 1.25);
+    max-width: 760px;
+  }
+
+  &__format {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    background: var(--theme-elevation-100);
+    color: var(--theme-elevation-700);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  &__learner {
+    background: var(--theme-elevation-0);
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: calc(var(--base) * 1.5);
+    max-width: 760px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--theme-elevation-500);
+    margin-bottom: 6px;
+  }
+
+  &__empty {
+    color: var(--theme-elevation-400);
+    font-size: 0.9375rem;
+  }
+
+  &__hint {
+    color: var(--theme-elevation-500);
+    font-size: 0.8125rem;
+    margin: 12px 0 0;
+  }
+
+  // ── Conversational (chat bubbles) ────────────────────────────────────────
+  &__chat {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__bubble {
+    position: relative;
+    padding: 10px 14px;
+    border-radius: 14px;
+    max-width: 85%;
+    line-height: 1.45;
+    font-size: 0.9375rem;
+
+    &--leo {
+      align-self: flex-start;
+      background: var(--theme-elevation-50);
+      border: 1px solid var(--theme-elevation-150);
+      border-bottom-left-radius: 4px;
+    }
+
+    &--kid {
+      align-self: flex-end;
+      background: var(--theme-success-50, #ecfdf5);
+      border: 1px solid var(--theme-success-100, #d1fae5);
+      color: var(--theme-success-800, #065f46);
+      border-bottom-right-radius: 4px;
+    }
+  }
+
+  &__bubble-role {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+    margin-bottom: 4px;
+  }
+
+  &__bubble-text {
+    white-space: pre-wrap;
+  }
+
+  &__bubble-flags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  &__flag {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+
+    &--reply {
+      color: var(--theme-warning-800, #92400e);
+      background: var(--theme-warning-50, #fef3c7);
+      border: 1px solid var(--theme-warning-200, #fde68a);
+    }
+
+    &--action {
+      color: var(--theme-elevation-700);
+      background: var(--theme-elevation-100);
+      border: 1px solid var(--theme-elevation-200);
+    }
+  }
+
+  // ── Worked example ───────────────────────────────────────────────────────
+  &__worked {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__problem,
+  &__answer-box,
+  &__why {
+    background: var(--theme-elevation-50);
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: 8px;
+    padding: 14px 16px;
+
+    p {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+  }
+
+  &__answer-box {
+    background: var(--theme-success-50, #ecfdf5);
+    border-color: var(--theme-success-200, #a7f3d0);
+
+    p {
+      font-weight: 600;
+      color: var(--theme-success-800, #065f46);
+    }
+  }
+
+  &__steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    li {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+  }
+
+  &__step-num {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--theme-elevation-150);
+    color: var(--theme-elevation-800);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__step-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+
+  &__step-thought,
+  &__step-action {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  &__step-thought {
+    color: var(--theme-elevation-600);
+    font-style: italic;
+  }
+
+  &__step-tag {
+    flex-shrink: 0;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--theme-elevation-500);
+    background: var(--theme-elevation-100);
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-style: normal;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  // ── Mini-game / diagram / freeform ───────────────────────────────────────
+  &__game,
+  &__diagram {
+    font-size: 0.9375rem;
+  }
+
+  &__freeform {
+    p {
+      margin: 0 0 12px;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // ── Shared: raw JSON & meta ──────────────────────────────────────────────
+  &__meta {
+    h3 {
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--theme-elevation-500);
+      margin-block: calc(var(--base) * 1.25) 8px;
+    }
+  }
+
+  &__raw {
+    summary {
+      cursor: pointer;
+      color: var(--theme-elevation-600);
+      font-size: 0.8125rem;
+      padding: 4px 0;
+      user-select: none;
+    }
+
+    pre {
+      background: var(--theme-elevation-50);
+      border: 1px solid var(--theme-elevation-150);
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      max-height: 600px;
+    }
+  }
+
+  &__feedback {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 6px 16px;
+    font-size: 0.9375rem;
+    margin: 0;
+
+    dt {
+      font-weight: 600;
+      color: var(--theme-elevation-500);
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding-top: 3px;
+    }
+
+    dd {
+      margin: 0;
+    }
+  }
+}

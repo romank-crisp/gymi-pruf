@@ -30,6 +30,14 @@ export const TheoryBlocks: CollectionConfig = {
     components: {
       views: {
         edit: {
+          preview: {
+            Component: '/components/admin/TheoryBlockPreview',
+            path: '/preview',
+            tab: {
+              label: 'Preview',
+              href: '/preview',
+            },
+          },
           workflow: {
             Component: '/components/admin/StatusTransitionsTab',
             path: '/workflow',
