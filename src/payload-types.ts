@@ -69,9 +69,18 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
-    exercises: Exercise;
-    'prompt-templates': PromptTemplate;
-    'audit-log': AuditLog;
+    domains: Domain;
+    modules: Module;
+    units: Unit;
+    concepts: Concept;
+    'concept-prerequisites': ConceptPrerequisite;
+    'exercise-groups': ExerciseGroup;
+    'exercise-templates': ExerciseTemplate;
+    'theory-blocks': TheoryBlock;
+    'slot-pools': SlotPool;
+    'slot-items': SlotItem;
+    'l1-variants': L1Variant;
+    'concept-cards': ConceptCard;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -81,9 +90,18 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    exercises: ExercisesSelect<false> | ExercisesSelect<true>;
-    'prompt-templates': PromptTemplatesSelect<false> | PromptTemplatesSelect<true>;
-    'audit-log': AuditLogSelect<false> | AuditLogSelect<true>;
+    domains: DomainsSelect<false> | DomainsSelect<true>;
+    modules: ModulesSelect<false> | ModulesSelect<true>;
+    units: UnitsSelect<false> | UnitsSelect<true>;
+    concepts: ConceptsSelect<false> | ConceptsSelect<true>;
+    'concept-prerequisites': ConceptPrerequisitesSelect<false> | ConceptPrerequisitesSelect<true>;
+    'exercise-groups': ExerciseGroupsSelect<false> | ExerciseGroupsSelect<true>;
+    'exercise-templates': ExerciseTemplatesSelect<false> | ExerciseTemplatesSelect<true>;
+    'theory-blocks': TheoryBlocksSelect<false> | TheoryBlocksSelect<true>;
+    'slot-pools': SlotPoolsSelect<false> | SlotPoolsSelect<true>;
+    'slot-items': SlotItemsSelect<false> | SlotItemsSelect<true>;
+    'l1-variants': L1VariantsSelect<false> | L1VariantsSelect<true>;
+    'concept-cards': ConceptCardsSelect<false> | ConceptCardsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -174,155 +192,203 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "exercises".
+ * via the `definition` "domains".
  */
-export interface Exercise {
-  id: number;
-  title: string;
-  /**
-   * Shown once per session before the task. Dismissible after first view.
-   */
-  intro: {
-    /**
-     * What you will do.
-     */
-    what: string;
-    /**
-     * Why it matters.
-     */
-    why: string;
-    workedExample?: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
-  };
-  format:
-    | 'tap_to_tag'
-    | 'multiple_choice'
-    | 'multi_select'
-    | 'fill_blank'
-    | 'drag_drop'
-    | 'sentence_building'
-    | 'audio'
-    | 'image'
-    | 'error_spotting'
-    | 'transformation'
-    | 'writing';
-  /**
-   * 5–12 items keyed to the chosen format. Structure is format-specific — see src/validators/items/.
-   */
-  items:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  section: 'sprachbetrachtung' | 'aufsatz' | 'textverstaendnis' | 'rechtschreibung' | 'assessment';
-  /**
-   * e.g. Wortarten, Satzglieder, Kasus.
-   */
-  topic: string;
-  /**
-   * e.g. Nomen erkennen, Akkusativ vs Dativ.
-   */
-  subtopic?: string | null;
-  difficulty: number;
-  /**
-   * 1 = tangential, 2 = common, 3 = high-frequency exam topic. Drives recommendation weighting.
-   */
-  examRelevance: number;
-  cantonApplicability: ('ZH' | 'BE' | 'LU' | 'ALL')[];
-  estimatedTimeSec: number;
-  lifecycleState: 'generated' | 'published' | 'rejected' | 'retired';
-  /**
-   * Required when state = rejected.
-   */
-  rejectionReason?: string | null;
-  /**
-   * Where this exercise came from and who touched it.
-   */
-  provenance?: {
-    /**
-     * The template used to generate this item (null if authored manually).
-     */
-    promptTemplate?: (number | null) | PromptTemplate;
-    /**
-     * Shared across all items from a single AI run, for traceability.
-     */
-    generationBatchId?: string | null;
-    /**
-     * The reviewer who most recently approved/edited/rejected.
-     */
-    reviewer?: (number | null) | User;
-    reviewedAt?: string | null;
-  };
-  /**
-   * Real-world usage stats. Populated by the app; divergence from `difficulty` triggers re-review.
-   */
-  performance?: {
-    attempts?: number | null;
-    /**
-     * 0.0–1.0
-     */
-    correctRate?: number | null;
-    avgTimeSec?: number | null;
-    lastComputedAt?: string | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "prompt-templates".
- */
-export interface PromptTemplate {
+export interface Domain {
   id: number;
   name: string;
+  /**
+   * Auto-generated from name if left blank.
+   */
+  slug: string;
+  examStrand: 'assessed' | 'supporting';
+  /**
+   * Lower numbers appear first in the tree.
+   */
+  displayOrder: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "modules".
+ */
+export interface Module {
+  id: number;
+  name: string;
+  slug: string;
+  domain: number | Domain;
+  description?: string | null;
+  displayOrder: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "units".
+ */
+export interface Unit {
+  id: number;
+  name: string;
+  slug: string;
+  module: number | Module;
+  description?: string | null;
+  displayOrder: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "concepts".
+ */
+export interface Concept {
+  id: number;
+  name: string;
+  slug: string;
+  unit: number | Unit;
+  /**
+   * One-sentence learner-facing description.
+   */
+  description?: string | null;
+  /**
+   * Flag if this concept targets a known DaZ confusion. Leave blank for neutral concepts.
+   */
+  dazPainPoint?: ('gender' | 'cases' | 'tenses' | 'word_order' | 'separable_verbs') | null;
+  /**
+   * 1 = trivial, 5 = very hard. Calibrated later from telemetry.
+   */
+  baseDifficulty: number;
+  /**
+   * Expected total attempts across intro + practice + review + checkpoint phases.
+   */
+  targetAttempts: number;
+  displayOrder: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "concept-prerequisites".
+ */
+export interface ConceptPrerequisite {
+  id: number;
+  /**
+   * The concept that has the prerequisite.
+   */
+  concept: number | Concept;
+  /**
+   * The concept that must be known first.
+   */
+  prerequisite: number | Concept;
+  strength: 'hard' | 'soft';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "exercise-groups".
+ */
+export interface ExerciseGroup {
+  id: number;
+  name: string;
+  /**
+   * Globally unique.
+   */
+  slug: string;
+  /**
+   * Optional. Groups are phase-bundle attributes, not structural. Templates carry their own curriculum anchor.
+   */
+  concept?: (number | null) | Concept;
+  phase: 'intro' | 'practice' | 'review' | 'checkpoint';
+  /**
+   * Number of correct items needed to complete this phase for a learner.
+   */
+  targetItems: number;
+  displayOrder: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "exercise-templates".
+ */
+export interface ExerciseTemplate {
+  id: number;
+  /**
+   * Primary curriculum anchor. Anchor at the narrowest level that fits (concept for single-concept exercises; unit/section/module/domain for cross-concept exercises).
+   */
+  primaryAnchor:
+    | {
+        relationTo: 'domains';
+        value: number | Domain;
+      }
+    | {
+        relationTo: 'modules';
+        value: number | Module;
+      }
+    | {
+        relationTo: 'units';
+        value: number | Unit;
+      }
+    | {
+        relationTo: 'concepts';
+        value: number | Concept;
+      };
+  /**
+   * Optional cross-references (max 2). Use when an exercise genuinely spans multiple concepts, units, or domains.
+   */
+  secondaryAnchors?:
+    | {
+        anchor:
+          | {
+              relationTo: 'domains';
+              value: number | Domain;
+            }
+          | {
+              relationTo: 'modules';
+              value: number | Module;
+            }
+          | {
+              relationTo: 'units';
+              value: number | Unit;
+            }
+          | {
+              relationTo: 'concepts';
+              value: number | Concept;
+            };
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional phase-bundle attribute (intro / practice / review / checkpoint). Not structural — curriculum position comes from primaryAnchor.
+   */
+  exerciseGroup?: (number | null) | ExerciseGroup;
   format:
-    | 'tap_to_tag'
-    | 'multiple_choice'
+    | 'single_choice'
     | 'multi_select'
     | 'fill_blank'
-    | 'drag_drop'
-    | 'sentence_building'
-    | 'audio'
-    | 'image'
-    | 'error_spotting'
-    | 'transformation'
-    | 'writing';
-  topic: string;
-  subtopic?: string | null;
-  version: number;
+    | 'tap_text'
+    | 'drag_order'
+    | 'drag_sort'
+    | 'matching_pairs'
+    | 'voice_answer'
+    | 'free_text_short'
+    | 'dictation'
+    | 'passage_comprehension'
+    | 'essay_writing'
+    | 'game_wordhunt'
+    | 'game_speedcat'
+    | 'conversational_exchange';
+  cognitiveType: 'recognition' | 'classification' | 'generation' | 'transformation' | 'application';
+  difficulty: number;
   /**
-   * Only one version per (format, topic, subtopic) should be active at a time. Enforced softly — the generation script picks isActive=true.
+   * The learner-facing prompt. Use `{SLOT_NAME}` to reference slot items, e.g. "Welches Genus hat {NOUN}?".
    */
-  isActive?: boolean | null;
+  promptPattern: string;
   /**
-   * Role and style guardrails. Should reference the five learning principles.
+   * How to derive and evaluate the correct answer. Shape depends on format — see docs/collections/exercise-templates.md (to be written).
    */
-  systemPrompt: string;
-  /**
-   * Instructions for the model. Use {{placeholders}} for per-batch variables (e.g. {{difficulty}}, {{count}}).
-   */
-  userPromptTemplate: string;
-  /**
-   * JSON schema the generator output must conform to. Used by auto-validation.
-   */
-  outputJsonSchema:
+  answerSpec:
     | {
         [k: string]: unknown;
       }
@@ -332,28 +398,209 @@ export interface PromptTemplate {
     | boolean
     | null;
   /**
-   * Admin-only notes on what this template is for, known failure modes, etc.
+   * Array of {slot_name, pool_slug, tier_min, tier_max}. Leave empty for AI-native templates.
    */
-  notes?: string | null;
+  slotDefinitions?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  generationMode: 'static' | 'hybrid' | 'ai_native';
+  /**
+   * Prompt sent to the model for hybrid / ai_native modes. Ignored when generationMode = static.
+   */
+  aiPrompt?: string | null;
+  /**
+   * Progressive hints shown on repeated wrong answers. First is gentlest, last gives the answer.
+   */
+  hintLadder?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Shown on correct answer. Slot placeholders allowed.
+   */
+  feedbackCorrect?: string | null;
+  /**
+   * Multi-select / partial credit.
+   */
+  feedbackPartial?: string | null;
+  /**
+   * Shown on wrong answer before walkthrough.
+   */
+  feedbackWrong?: string | null;
+  /**
+   * Long-form explanation after exhausting hints.
+   */
+  feedbackWalkthrough?: string | null;
+  tags?:
+    | {
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  status: 'draft' | 'in_review' | 'approved' | 'active' | 'flagged' | 'retired';
+  version: number;
+  /**
+   * The older template this version replaces, if any.
+   */
+  supersedes?: (number | null) | ExerciseTemplate;
+  /**
+   * Set by hook on create.
+   */
+  createdBy?: (number | null) | User;
+  approvedBy?: (number | null) | User;
+  approvedAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "audit-log".
+ * via the `definition` "theory-blocks".
  */
-export interface AuditLog {
+export interface TheoryBlock {
   id: number;
+  title: string;
+  concept: number | Concept;
+  format: 'conversational' | 'interactive_diagram' | 'mini_game' | 'video' | 'passage' | 'worked_example';
+  l1: 'de' | 'en' | 'uk' | 'ru' | 'it' | 'pt';
   /**
-   * One-line recap, e.g. "reviewer alice rejected exercise #412".
+   * Format-specific payload. See docs/collections/theory-blocks.md for shapes.
    */
-  summary?: string | null;
-  action: 'created' | 'transitioned' | 'edited';
-  fromState?: string | null;
-  toState?: string | null;
-  exercise?: (number | null) | Exercise;
-  actor?: (number | null) | User;
-  reason?: string | null;
+  content:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  status: 'draft' | 'in_review' | 'approved' | 'active' | 'flagged' | 'retired';
+  version: number;
+  /**
+   * The older block this version replaces.
+   */
+  supersedes?: (number | null) | TheoryBlock;
+  createdBy?: (number | null) | User;
+  approvedBy?: (number | null) | User;
+  approvedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "slot-pools".
+ */
+export interface SlotPool {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string | null;
+  /**
+   * e.g. "noun", "verb", "adjective", "sentence", "passage". Free-form.
+   */
+  contentType: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "slot-items".
+ */
+export interface SlotItem {
+  id: number;
+  pool: number | SlotPool;
+  /**
+   * The concrete value substituted into templates.
+   */
+  value: string;
+  /**
+   * Arbitrary structured data, e.g. {genus, plural, frequency}. Accessed in templates via dot-paths: {NOUN.metadata.artikel}.
+   */
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  difficultyTier: number;
+  /**
+   * Uncheck to retire without deleting.
+   */
+  active: boolean;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "l1-variants".
+ */
+export interface L1Variant {
+  id: number;
+  parentType: 'theory_block' | 'exercise_template' | 'concept_card';
+  /**
+   * ID of the parent row in the collection named by parentType. UUID or numeric.
+   */
+  parentId: string;
+  l1: 'de' | 'en' | 'uk' | 'ru' | 'it' | 'pt';
+  /**
+   * Content shape mirrors the parent type (bubbles for theory_block, prompt/answer for exercise_template, etc.).
+   */
+  content:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  status: 'draft' | 'in_review' | 'approved' | 'active' | 'flagged' | 'retired';
+  approvedBy?: (number | null) | User;
+  approvedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "concept-cards".
+ */
+export interface ConceptCard {
+  id: number;
+  concept: number | Concept;
+  l1: 'de' | 'en' | 'uk' | 'ru' | 'it' | 'pt';
+  /**
+   * One-paragraph definition in the target L1.
+   */
+  definition: string;
+  /**
+   * Concrete sentences that illustrate the concept.
+   */
+  examples?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Known misconceptions bilingual learners bring to this concept.
+   */
+  commonConfusions?: string | null;
+  /**
+   * Related concepts the mascot may link to.
+   */
+  crossReferences?: (number | Concept)[] | null;
+  status: 'draft' | 'in_review' | 'approved' | 'active' | 'flagged' | 'retired';
   updatedAt: string;
   createdAt: string;
 }
@@ -390,16 +637,52 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
-        relationTo: 'exercises';
-        value: number | Exercise;
+        relationTo: 'domains';
+        value: number | Domain;
       } | null)
     | ({
-        relationTo: 'prompt-templates';
-        value: number | PromptTemplate;
+        relationTo: 'modules';
+        value: number | Module;
       } | null)
     | ({
-        relationTo: 'audit-log';
-        value: number | AuditLog;
+        relationTo: 'units';
+        value: number | Unit;
+      } | null)
+    | ({
+        relationTo: 'concepts';
+        value: number | Concept;
+      } | null)
+    | ({
+        relationTo: 'concept-prerequisites';
+        value: number | ConceptPrerequisite;
+      } | null)
+    | ({
+        relationTo: 'exercise-groups';
+        value: number | ExerciseGroup;
+      } | null)
+    | ({
+        relationTo: 'exercise-templates';
+        value: number | ExerciseTemplate;
+      } | null)
+    | ({
+        relationTo: 'theory-blocks';
+        value: number | TheoryBlock;
+      } | null)
+    | ({
+        relationTo: 'slot-pools';
+        value: number | SlotPool;
+      } | null)
+    | ({
+        relationTo: 'slot-items';
+        value: number | SlotItem;
+      } | null)
+    | ({
+        relationTo: 'l1-variants';
+        value: number | L1Variant;
+      } | null)
+    | ({
+        relationTo: 'concept-cards';
+        value: number | ConceptCard;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -487,77 +770,205 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "exercises_select".
+ * via the `definition` "domains_select".
  */
-export interface ExercisesSelect<T extends boolean = true> {
-  title?: T;
-  intro?:
-    | T
-    | {
-        what?: T;
-        why?: T;
-        workedExample?: T;
-      };
-  format?: T;
-  items?: T;
-  section?: T;
-  topic?: T;
-  subtopic?: T;
-  difficulty?: T;
-  examRelevance?: T;
-  cantonApplicability?: T;
-  estimatedTimeSec?: T;
-  lifecycleState?: T;
-  rejectionReason?: T;
-  provenance?:
-    | T
-    | {
-        promptTemplate?: T;
-        generationBatchId?: T;
-        reviewer?: T;
-        reviewedAt?: T;
-      };
-  performance?:
-    | T
-    | {
-        attempts?: T;
-        correctRate?: T;
-        avgTimeSec?: T;
-        lastComputedAt?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "prompt-templates_select".
- */
-export interface PromptTemplatesSelect<T extends boolean = true> {
+export interface DomainsSelect<T extends boolean = true> {
   name?: T;
-  format?: T;
-  topic?: T;
-  subtopic?: T;
-  version?: T;
-  isActive?: T;
-  systemPrompt?: T;
-  userPromptTemplate?: T;
-  outputJsonSchema?: T;
-  notes?: T;
+  slug?: T;
+  examStrand?: T;
+  displayOrder?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "audit-log_select".
+ * via the `definition` "modules_select".
  */
-export interface AuditLogSelect<T extends boolean = true> {
-  summary?: T;
-  action?: T;
-  fromState?: T;
-  toState?: T;
-  exercise?: T;
-  actor?: T;
-  reason?: T;
+export interface ModulesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  domain?: T;
+  description?: T;
+  displayOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "units_select".
+ */
+export interface UnitsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  module?: T;
+  description?: T;
+  displayOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "concepts_select".
+ */
+export interface ConceptsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  unit?: T;
+  description?: T;
+  dazPainPoint?: T;
+  baseDifficulty?: T;
+  targetAttempts?: T;
+  displayOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "concept-prerequisites_select".
+ */
+export interface ConceptPrerequisitesSelect<T extends boolean = true> {
+  concept?: T;
+  prerequisite?: T;
+  strength?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "exercise-groups_select".
+ */
+export interface ExerciseGroupsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  concept?: T;
+  phase?: T;
+  targetItems?: T;
+  displayOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "exercise-templates_select".
+ */
+export interface ExerciseTemplatesSelect<T extends boolean = true> {
+  primaryAnchor?: T;
+  secondaryAnchors?:
+    | T
+    | {
+        anchor?: T;
+        id?: T;
+      };
+  exerciseGroup?: T;
+  format?: T;
+  cognitiveType?: T;
+  difficulty?: T;
+  promptPattern?: T;
+  answerSpec?: T;
+  slotDefinitions?: T;
+  generationMode?: T;
+  aiPrompt?: T;
+  hintLadder?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  feedbackCorrect?: T;
+  feedbackPartial?: T;
+  feedbackWrong?: T;
+  feedbackWalkthrough?: T;
+  tags?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
+  status?: T;
+  version?: T;
+  supersedes?: T;
+  createdBy?: T;
+  approvedBy?: T;
+  approvedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "theory-blocks_select".
+ */
+export interface TheoryBlocksSelect<T extends boolean = true> {
+  title?: T;
+  concept?: T;
+  format?: T;
+  l1?: T;
+  content?: T;
+  status?: T;
+  version?: T;
+  supersedes?: T;
+  createdBy?: T;
+  approvedBy?: T;
+  approvedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "slot-pools_select".
+ */
+export interface SlotPoolsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  contentType?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "slot-items_select".
+ */
+export interface SlotItemsSelect<T extends boolean = true> {
+  pool?: T;
+  value?: T;
+  metadata?: T;
+  difficultyTier?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "l1-variants_select".
+ */
+export interface L1VariantsSelect<T extends boolean = true> {
+  parentType?: T;
+  parentId?: T;
+  l1?: T;
+  content?: T;
+  status?: T;
+  approvedBy?: T;
+  approvedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "concept-cards_select".
+ */
+export interface ConceptCardsSelect<T extends boolean = true> {
+  concept?: T;
+  l1?: T;
+  definition?: T;
+  examples?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  commonConfusions?: T;
+  crossReferences?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

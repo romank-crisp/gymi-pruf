@@ -27,7 +27,7 @@ The central collection. Every exercise across all 11 formats and 4 exam sections
 | Value | Label | Primary use |
 |-------|-------|-------------|
 | `tap_to_tag` | Tap-to-tag | Sprachbetrachtung — grammar tagging |
-| `multiple_choice` | Multiple choice | Quick comprehension checks |
+| `single_choice` | Single choice | Quick comprehension checks (one correct answer) |
 | `multi_select` | Multi-select | Multiple-answer questions |
 | `fill_blank` | Fill in the blank | Orthography, Kasus |
 | `drag_drop` | Drag and drop | Matching, ordering, sorting |

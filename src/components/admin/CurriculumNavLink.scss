@@ -1,0 +1,26 @@
+.curriculum-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--theme-elevation-900);
+  font-weight: 500;
+  font-size: 0.9375rem;
+
+  &:hover {
+    background: var(--theme-elevation-50);
+    color: var(--theme-success-600, #2563eb);
+  }
+
+  &__icon {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  &__label {
+    flex: 1;
+  }
+}
