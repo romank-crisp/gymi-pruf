@@ -45,3 +45,7 @@ data/*.db
 data/*.db-journal
 data/*.db-wal
 data/*.db-shm
+
+# mcp-server build output
+mcp-server/dist
+mcp-server/node_modules
