@@ -1,29 +1,22 @@
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { KanbanApp } from '@/components/kanban-app'
+import * as listsRepo from '@/lib/repositories/lists'
+import * as tasksRepo from '@/lib/repositories/tasks'
 
-export default function Home() {
+// SQLite is local + fast; never cache.
+export const dynamic = 'force-dynamic'
+
+export default async function Home() {
+  const lists = await listsRepo.listAll()
+  const selectedId = lists[0]?.id ?? null
+  const tasks = selectedId
+    ? await tasksRepo.listFiltered({ listId: selectedId })
+    : []
+
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto max-w-3xl px-6 py-16">
-        <header className="mb-10">
-          <h1 className="text-3xl font-semibold tracking-tight">Product Launch</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Kanban + roadmap for the Gymi-Vorbereitung product. UI lands in Phase 4.
-          </p>
-        </header>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              Phase 1 — Scaffold <Badge variant="outline">complete</Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2 text-sm text-muted-foreground">
-            <p>Next.js 16 · Tailwind v4 · shadcn/ui (neutral palette) · running on port 3001.</p>
-            <p>Ready for Phase 2: database schema and repositories.</p>
-          </CardContent>
-        </Card>
-      </div>
-    </main>
+    <KanbanApp
+      initialLists={lists}
+      initialTasks={tasks}
+      initialSelectedListId={selectedId}
+    />
   )
 }
