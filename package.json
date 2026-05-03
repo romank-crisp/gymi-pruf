@@ -23,7 +23,12 @@
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "pl:dev": "pnpm --dir product-launch-app dev",
+    "pl:build": "pnpm --dir product-launch-app build && pnpm --dir product-launch-app/mcp-server build",
+    "pl:test": "pnpm --dir product-launch-app test",
+    "pl:db:migrate": "pnpm --dir product-launch-app db:migrate",
+    "pl:db:seed": "pnpm --dir product-launch-app db:seed"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",
