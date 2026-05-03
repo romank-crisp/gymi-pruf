@@ -39,6 +39,7 @@ A small kanban + roadmap app for managing the **Gymi-Vorbereitung** product buil
 | ORM / migrations | Drizzle ORM + drizzle-kit | Type-safe, schema-as-code, easy migrations |
 | Validation | Zod | Shared schemas between API + MCP + client |
 | MCP SDK | `@modelcontextprotocol/sdk` | Stdio transport |
+| Markdown | `react-markdown` + `remark-gfm` | Render + GitHub-flavoured markdown (lists, tables, code) |
 | Test | Vitest | Unit tests for the data layer + zod schemas |
 
 ---
@@ -287,6 +288,7 @@ Server-renders the initial board state (lists + selected list's tasks) using dir
 | `ListItem` | One list row with rename/delete via DropdownMenu |
 | `TaskSheet` | Right-anchored Sheet, edit form + system fields + delete |
 | `TaskForm` | Inline form used inside TaskSheet (and for "+ Add task" in column footers) |
+| `MarkdownEditor` | Edit/Preview tabs, textarea on Edit, `react-markdown` on Preview |
 
 ### Drag-and-drop
 
@@ -332,10 +334,10 @@ Each phase ends in a working state with at least a smoke test or visible UI. Com
 ### Phase 1 — Scaffold
 
 1. `pnpm create next-app` in `product-launch-app/` (TS, App Router, Tailwind, no src dir → re-organise to src).
-2. `pnpm add drizzle-orm better-sqlite3 zod @dnd-kit/core @dnd-kit/sortable @modelcontextprotocol/sdk`.
+2. `pnpm add drizzle-orm better-sqlite3 zod @dnd-kit/core @dnd-kit/sortable @modelcontextprotocol/sdk react-markdown remark-gfm`.
 3. `pnpm add -D drizzle-kit @types/better-sqlite3 vitest`.
 4. `pnpx shadcn@latest init` → black/white theme.
-5. `pnpx shadcn@latest add button card input textarea sheet dialog dropdown-menu badge label`.
+5. `pnpx shadcn@latest add button card input textarea sheet dialog dropdown-menu badge label tabs`.
 6. Tailwind palette override → only zinc + black + white.
 7. `data/.gitkeep`, add `data/*.db*` to `.gitignore`.
 
@@ -418,7 +420,7 @@ Each phase ends in a working state with at least a smoke test or visible UI. Com
 2. **Default lists** — seed "App / Content / Teachers Zone"? Or start empty and let me create them via MCP?
 3. **Token unit** — integer "tokens" (millions of API tokens? thousands?). I'm leaning **whole tokens** as the source of truth (no rounding); display as `42k` in the UI when ≥ 1000. OK?
 4. **MCP authentication** — local stdio = no auth needed. If you ever want to access from a remote agent, we'd add a bearer token. Acceptable for v1?
-5. **Description editing** — plain textarea for v1. Markdown rendering is a 30-min add-on later. OK to defer?
+5. **Description editing** — ✅ **Markdown supported in v1.** TaskSheet uses shadcn `Tabs` for Edit / Preview. Storage is the raw markdown string; rendering uses `react-markdown` + `remark-gfm` (GFM: tables, task lists, fenced code). No syntax highlighting in v1 — code blocks are monospace + boxed.
 6. **Bulk operations** — none. Add later if you find yourself needing them. OK?
 
 ---
